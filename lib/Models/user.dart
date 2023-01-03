@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class UserModel with ChangeNotifier {
+class UserModel {
   final String id;
   final String name;
   final String email;
@@ -18,4 +18,33 @@ class UserModel with ChangeNotifier {
     required this.type,
     required this.token,
   });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'email': email,
+      'password': password,
+      'address': address,
+      'type': type,
+      'token': token,
+    };
+  }
+
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      id: map['_id'] as String,
+      name: map['name'] as String,
+      email: map['email'] as String,
+      password: map['password'] as String,
+      address: map['address'] as String,
+      type: map['type'] as String,
+      token: map['token'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

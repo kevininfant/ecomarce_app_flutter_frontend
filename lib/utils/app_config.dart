@@ -1,3 +1,3 @@
 // development url
 
-final baseUrl = 'http://localhost:3000/api/';
+final uri = 'http://localhost:3000/api';

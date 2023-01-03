@@ -1,37 +1,42 @@
-import '../Models/user.dart';
-import '../utils/app_config.dart';
+
+import 'dart:developer';
+import 'package:ecomerce_app/Models/user.dart';
+import 'package:ecomerce_app/constants/error_handling.dart';
+import 'package:ecomerce_app/constants/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import '../utils/app_config.dart';
 
-class UserProvider with ChangeNotifier {
- List<UserModel> _items = [];
-
-  List<UserModel> get items {
-    return [..._items];
-  }
-
-  UserProvider(
-    this._items,
-  );
-
-  Future<void> UserSignUp(String oldpassword, newpassword) async {
-    final url = Uri.parse(baseUrl + 'signup');
+class AuthProvider {
+  void signUpUser(
+      {required BuildContext context,
+      required String email,
+      required String name,
+      required String password}) async {
+       
     try {
-      final response = await http.post(url, headers: {
-        'api-version': 'v1',
-        'auth-key': authToken,
-      }, body: {
-        "action": "changePassword",
-        "empCode": empCode,
-        "oldPassword": oldpassword,
-        "newPassword": newpassword,
+      UserModel user = UserModel(
+          id: '',
+          name: name,
+          email: email,
+          password: password,
+          address: '',
+          type: '',
+          token: '');
+           
+           
+      http.Response res = await http.post(
+        Uri.parse('$uri/signup'),
+          headers: <String,String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+           body: user.toJson(),);
+           log(res.toString());
+      httpErrorHandle(responce: res, context: context, onSuccess: () {
+        showSnackBar(context, "Account Created! Login with same credantianls");
       });
-      var responseData = json.decode(response.body);
-      print(responseData);
-    } catch (error) {
-      print(error);
-      throw error;
+    } catch (e) {
+      showSnackBar(context,  "Account Created! buseeeee");
     }
   }
 }
