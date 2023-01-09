@@ -1,4 +1,4 @@
-
+import 'dart:convert';
 import 'dart:developer';
 import 'package:ecomerce_app/Models/user.dart';
 import 'package:ecomerce_app/constants/error_handling.dart';
@@ -13,7 +13,6 @@ class AuthProvider {
       required String email,
       required String name,
       required String password}) async {
-       
     try {
       UserModel user = UserModel(
           id: '',
@@ -23,20 +22,53 @@ class AuthProvider {
           address: '',
           type: '',
           token: '');
-           
-           
+
       http.Response res = await http.post(
         Uri.parse('$uri/signup'),
-          headers: <String,String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-           body: user.toJson(),);
-           log(res.toString());
-      httpErrorHandle(responce: res, context: context, onSuccess: () {
-        showSnackBar(context, "Account Created! Login with same credantianls");
-      });
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: user.toJson(),
+      );
+      log(res.toString());
+      httpErrorHandle(
+          responce: res,
+          context: context,
+          onSuccess: () {
+            showSnackBar(
+                context, "Account Created! Login with same credantianls");
+          });
     } catch (e) {
-      showSnackBar(context,  "Account Created! buseeeee");
+      showSnackBar(context, "Account Created! buseeeee");
+    }
+  }
+  // signin
+
+  void signInUser(
+      {required BuildContext context,
+      required String email,
+      required String password}) async {
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/signin'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
+      log(res.toString());
+      httpErrorHandle(
+          responce: res,
+          context: context,
+          onSuccess: () {
+            showSnackBar(
+                context, "Account Created! Login with same credantianls");
+          });
+    } catch (e) {
+      showSnackBar(context, "Account Created! buseeeee");
     }
   }
 }

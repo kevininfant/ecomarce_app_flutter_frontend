@@ -43,6 +43,12 @@ class _AuthScreenState extends State<AuthScreen> {
         name: _nameController.text,
         password: _passwordController.text);
   }
+   void signInUser() {
+    authProvider.signInUser(
+        context: context,
+        email: _emailController.text,
+        password: _passwordController.text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +160,12 @@ class _AuthScreenState extends State<AuthScreen> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      CustomButton(text: 'Sign node In', onTap: () {})
+                      CustomButton(text: 'Sign node In', onTap: () {
+   if (_signInFormKey.currentState!.validate()) {               
+                              signInUser();
+                            }
+
+                      })
                     ],
                   )),
             ),

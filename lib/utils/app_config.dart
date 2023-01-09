@@ -1,3 +1,3 @@
 // development url
 
-final uri = 'http://localhost:3000/api';
+final uri = 'http://192.168.0.108:3000/api';
